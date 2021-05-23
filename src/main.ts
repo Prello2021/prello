@@ -1,9 +1,13 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
 import { AddressInfo } from "net";
+import { Client } from "pg";
 
 //定義
 const app = express();
+app.use(cors()).use(express.json({ limit: "10mb" })); // マックス10mb
+// expressの設定(cors method header 許可の設定)
+app.disable("x-powered-by");
 
 //expressで4000ポートにサーバー起動
 const server = app.listen(4000, () => {
@@ -11,12 +15,26 @@ const server = app.listen(4000, () => {
   console.log(`Node.js is listening to PORT: ${address.port}`);
 });
 
-// expressの設定(cors method header 許可の設定)
-app.disable("x-powered-by");
-app.get("/", (req: Request, res: Response) => {
-  const param = { result: "Hello !" };
-  res.header("Content-Type", "application/json; charset=utf-8");
-  res.send(param);
+// postgres 接続情報
+const connection = new Client({
+  host: "",
+  port: 5432,
+  user: "user",
+  password: "password",
+  database: "prello",
 });
 
-app.use(cors()).use(express.json({ limit: "10mb" })); // マックス10mb
+// postgresに接続
+connection
+  .connect()
+  .then(() => console.log("postgres connect success!"))
+  .catch((err) => console.log(err));
+
+const query = "SELECT * FROM users;";
+
+app.get("/", (req: Request, res: Response) => {
+  connection.query(query, (error, result) => {
+    console.log(result);
+    res.json(result.rows);
+  });
+});
