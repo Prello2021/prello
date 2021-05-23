@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Request, Response } from "express";
 import { AddressInfo } from "net";
 
@@ -17,3 +18,5 @@ app.get("/", (req: Request, res: Response) => {
   res.header("Content-Type", "application/json; charset=utf-8");
   res.send(param);
 });
+
+app.use(cors()).use(express.json({ limit: "10mb" })); // マックス10mb
