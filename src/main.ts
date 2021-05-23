@@ -2,7 +2,9 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { AddressInfo } from "net";
 import { Client } from "pg";
+import { UserController } from "./controllers/UserController";
 import { UserRepository } from "./repositories/UserRepository";
+import { UserService } from "./services/UserService";
 import { Database } from "./utils/database/Database";
 
 //定義
@@ -17,35 +19,10 @@ const server = app.listen(4000, () => {
   console.log(`Node.js is listening to PORT: ${address.port}`);
 });
 
-// // postgres 接続情報
-// const connection = new Client({
-//   host: "",
-//   port: 5432,
-//   user: "user",
-//   password: "password",
-//   database: "prello",
-// });
-
-// // postgresに接続
-// connection
-//   .connect()
-//   .then(() => console.log("postgres connect success!"))
-//   .catch((err) => console.log(err));
-
-// const query = "SELECT * FROM users;";
-
-// app.get("/", (req: Request, res: Response) => {
-//   connection.query(query, (error, result) => {
-//     console.log(result);
-//     res.json(result.rows);
-//   });
-// });
-
 const db = new Database();
 
 const userRepository = new UserRepository(db);
+const userService = new UserService(userRepository);
+const userController = new UserController(userService);
 
-app.get("/", async (req: Request, res: Response) => {
-  const result = await userRepository.getAll();
-  res.json(result.value);
-});
+app.use("/api/", userController.router);

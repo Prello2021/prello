@@ -1,2 +1,2 @@
-export { Database, DatabaseResult } from "./Database";
-export { DatabaseErrorMessages } from "./DatabaseErrorMessages";
+export { Database, DatabaseResult } from './Database';
+export { DatabaseErrorMessages } from './DatabaseErrorMessages';
