@@ -1,6 +1,6 @@
-import { Client, QueryConfig } from 'pg';
-import { DatabaseErrorMessages } from '../database';
-import * as dotenv from 'dotenv';
+import { Client, QueryConfig } from "pg";
+import { DatabaseErrorMessages } from "../database";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
@@ -31,21 +31,21 @@ export class Database {
     this.connection = new Client(config);
     this.connection
       .connect()
-      .then(() => console.log('postgres connect success!'))
+      .then(() => console.log("postgres connect success!"))
       .catch((err) => console.log(err));
   }
 
-  public async transaction() {
-    this.connection.query('BEGIN');
-  }
+  // public async transaction() {
+  //   this.connection.query("BEGIN");
+  // }
 
-  public async commit() {
-    this.connection.query('COMMIT');
-  }
+  // public async commit() {
+  //   this.connection.query("COMMIT");
+  // }
 
-  public async rollback() {
-    this.connection.query('ROLLBACK');
-  }
+  // public async rollback() {
+  //   this.connection.query("ROLLBACK");
+  // }
 
   public async query<T>(
     queryTextOrConfig: string | QueryConfig<any>
@@ -99,7 +99,9 @@ export class Database {
     return result;
   }
 
-  public async update(queryTextOrConfig: string | QueryConfig<any>): Promise<DatabaseResult> {
+  public async update(
+    queryTextOrConfig: string | QueryConfig<any>
+  ): Promise<DatabaseResult> {
     const result: DatabaseResult = {};
     await this.connection.query(queryTextOrConfig).catch((err: Error) => {
       console.error(err.stack);
@@ -108,7 +110,9 @@ export class Database {
     return result;
   }
 
-  public async delete(queryTextOrConfig: string | QueryConfig<any>): Promise<DatabaseResult> {
+  public async delete(
+    queryTextOrConfig: string | QueryConfig<any>
+  ): Promise<DatabaseResult> {
     const result: DatabaseResult = {};
     await this.connection.query(queryTextOrConfig).catch((err: Error) => {
       console.error(err.stack);
