@@ -4,6 +4,7 @@ import { IUserService } from "../src/services/interfaces/IUserService";
 import { UserController } from "../src/controllers/UserController";
 
 import request from "supertest";
+import { Result } from "../src/utils/types/Result";
 
 const mockUserList: User[] = [
   {
@@ -18,22 +19,10 @@ const mockUserList: User[] = [
   },
 ];
 
-const mockUser: User = {
-  id: 1,
-  name: "test1",
-  hobby: "test1",
-};
-
 function createMockIUserService(): IUserService {
   const mockService: IUserService = {
     getAll: jest.fn(
       () => new Promise<User[]>((resolve) => resolve(mockUserList))
-    ), // 偽装作成
-    get: jest.fn(
-      (id: number) =>
-        new Promise<User>((resolve) => {
-          if (id === 1) resolve(mockUser);
-        })
     ),
   };
 
