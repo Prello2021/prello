@@ -1,12 +1,29 @@
-import { QueryConfig } from "pg";
-import { IUserRepository } from "../../../src/repositories/interfaces/IUserRepository";
-import { Database, DatabaseResult } from "../../../src/utils/database";
+import { Database } from "../../../src/utils/database";
 
-// 店舗アカウントテーブルを操作するRepositoryクラスを実装します。
+// テストで使用するRepositoryです。
 export class TestRepository {
   private database: Database;
 
   constructor(database: Database) {
     this.database = database;
+  }
+
+  // async clearTable(tableName: string): Promise<void> {
+  //   const query = {
+  //     text: `
+  //       DELETE FROM $1
+  //     `,
+  //     values: [tableName],
+  //   };
+  //   await this.database.delete(query);
+  // }
+
+  async clearTable(tableName: string): Promise<void> {
+    const query = {
+      text: `
+        DELETE FROM ${tableName}
+      `,
+    };
+    await this.database.delete(query);
   }
 }

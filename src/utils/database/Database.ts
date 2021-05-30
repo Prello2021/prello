@@ -47,6 +47,10 @@ export class Database {
   //   this.connection.query("ROLLBACK");
   // }
 
+  public async close(): Promise<void> {
+    await this.connection.end();
+  }
+
   public async query<T>(
     queryTextOrConfig: string | QueryConfig<any>
   ): Promise<DatabaseResult<T[]>> {

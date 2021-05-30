@@ -1,17 +1,20 @@
 import { User } from "../../src/models/User";
 import { UserRepository } from "../../src/repositories/UserRepository";
+import { TestRepository } from "./common/TestRepository";
 import { Database } from "../../src/utils/database/Database";
 
 const db = new Database();
+const testRepository = new TestRepository(db);
 
-beforeEach(() => {
-  // Userテーブルの初期化
-  console.log("Userテーブルの初期化");
+beforeEach(async () => {
+  // Userテーブルの初期化除(データを空にする)
+  await testRepository.clearTable("users");
 });
 
-afterEach(() => {
+afterEach(async () => {
   // Userテーブルの削除(データを空にする)
-  console.log("Userテーブルの削除(データを空にする)");
+  await testRepository.clearTable("users");
+  await db.close();
 });
 
 describe("UserRepository 正常系テスト", () => {
@@ -20,7 +23,7 @@ describe("UserRepository 正常系テスト", () => {
     const repository = new UserRepository(db);
 
     // Userデータを3件insertする。
-    const createdUsers = await createUserData(3, repository);
+    const createdUsers = await createUserData(1, repository);
     console.log(createdUsers);
 
     // UserRepository.getAllを実行する
@@ -29,7 +32,7 @@ describe("UserRepository 正常系テスト", () => {
     console.log(users);
 
     // 取得結果が3件であること
-    expect(3).toBe(users.length);
+    expect(1).toBe(users.length);
 
     // 結果の検証
     // 結果が createdUsers で返却されたデータと同じであること
