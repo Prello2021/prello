@@ -21,18 +21,14 @@ export class UserService implements IUserService {
 
     // Repositoryでエラーがあった場合、500エラーコードとエラー内容を返却
     if (getAllResult.error != null) {
-      // 複数件取得の場合、1件も取得できなかったときもエラーとはせず、空のレスポンスを返却
       result.statusCode = HttpStatusCode.InternalServerError;
       result.error = getAllResult.error;
       console.log(result.error);
       return result;
     }
-    // エラーは出てないが、中身がnullの場合、500エラーコードとエラー内容を返却
+    // エラーは出てないが、中身がnullの場合、エラーとはせず、空のレスポンスを返却
     if (getAllResult.value == null) {
-      result.statusCode = HttpStatusCode.InternalServerError;
-      result.error = new Error("ユーザーの取得に失敗しました。");
-      console.log(result.error);
-      return result;
+      getAllResult.value = [];
     }
 
     // ユーザーを結果に詰め込んで返却
