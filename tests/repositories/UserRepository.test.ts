@@ -23,24 +23,31 @@ describe("UserRepository 正常系テスト", () => {
     const repository = new UserRepository(db);
 
     // Userデータを3件insertする。
-    const createdUsers = await createUserData(1, repository);
-    console.log(createdUsers);
+    const createdUsers = await createUserData(3, repository);
 
-    // UserRepository.getAllを実行する
+    // getAllを実行する
     const result = await repository.getAll();
     const users = result.value as User[];
-    console.log(users);
 
     // 取得結果が3件であること
-    expect(1).toBe(users.length);
+    expect(3).toBe(users.length);
 
     // 結果の検証
+
+    // 検証のためUserMapを作成する
+    const userMap = createUserMap(users);
+
     // 結果が createdUsers で返却されたデータと同じであること
-    for (let index = 0; index < users.length; index++) {
-      expect(createdUsers[index].id).toBe(users[index].id);
-      expect(createdUsers[index].name).toBe(users[index].name);
-      expect(createdUsers[index].hobby).toBe(users[index].hobby);
-    }
+    createdUsers.forEach((createdUser) => {
+      // UserMapからIDで検索し、Userオブジェクトを取得する
+      const createdId = createdUser.id as number;
+      const resultUser = userMap.get(createdId) as User;
+
+      // 項目の検証
+      expect(createdUser.id).toBe(resultUser.id);
+      expect(createdUser.name).toBe(resultUser.name);
+      expect(createdUser.hobby).toBe(resultUser.hobby);
+    });
   });
 });
 
@@ -68,4 +75,19 @@ async function createUserData(
 
   // 作成したUserデータを返却する。
   return userList;
+}
+
+/**
+ * UserデータからidをキーとするMapを作成する
+ * @returns 作成されたUserMapデータ
+ */
+function createUserMap(users: User[]): Map<number, User> {
+  const result = new Map<number, User>();
+
+  users.forEach((user) => {
+    const userId = user.id as number;
+    result.set(userId, user);
+  });
+
+  return result;
 }
