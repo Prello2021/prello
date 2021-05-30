@@ -39,6 +39,7 @@ function createMockGetAllRepository(
       () =>
         new Promise<DatabaseResult<User[]>>((resolve) => resolve(mockResult))
     ),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     create: jest.fn((user: User) => {
       const mockResult: DatabaseResult<number> = {
         value: 0,
