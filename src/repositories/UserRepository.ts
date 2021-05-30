@@ -27,4 +27,23 @@ export class UserRepository implements IUserRepository {
 
     return this.database.query<User>(query);
   }
+
+  /**
+   * ユーザーの登録
+   * @returns 登録したユーザー
+   */
+  create(user: User): Promise<DatabaseResult<number>> {
+    const query = {
+      text: `
+        INSERT INTO 
+          users (name, hobby) 
+        VALUES 
+          ($1, $2)
+        RETURNING id
+      `,
+      values: [user.name, user.hobby],
+    };
+
+    return this.database.insert(query);
+  }
 }

@@ -39,6 +39,14 @@ function createMockGetAllRepository(
       () =>
         new Promise<DatabaseResult<User[]>>((resolve) => resolve(mockResult))
     ),
+    create: jest.fn((user: User) => {
+      const mockResult: DatabaseResult<number> = {
+        value: 0,
+      };
+      return new Promise<DatabaseResult<number>>((resolve) =>
+        resolve(mockResult)
+      );
+    }),
   };
 
   return mockRepository;
