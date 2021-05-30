@@ -2,6 +2,7 @@ import { User } from "../src/models/User";
 import { UserService } from "../src/services/UserService";
 import { IUserRepository } from "../src/repositories/interfaces/IUserRepository";
 import { DatabaseResult } from "../src/utils/database/Database";
+import { HttpStatusCode } from "../src/utils/http/HttpStatusCode";
 
 /**
  * モックのユーザー情報(複数)を作成
@@ -87,7 +88,7 @@ describe("UserService 正常系テスト(空のとき)", () => {
     const result = userList.value as User[];
 
     // 取得件数を検証する
-    expect(0).toBe(result.length);
+    expect(result.length).toBe(0);
     // エラーがないことを確認
     expect(userList.error).toBeUndefined();
   });
@@ -96,9 +97,21 @@ describe("UserService 正常系テスト(空のとき)", () => {
 describe("UserService 異常系テスト(Repositoryでエラー)", () => {
   it("getAll", async () => {
     // mockのResultにエラーを入れておく
+    const mockResult: DatabaseResult<User[]> = {
+      error: new Error("異常系エラー"),
+    };
     // Repositoryを作成し、Serviceをインスタンス化
+    const mockRepository = createMockGetAllRepository(mockResult);
+    const service = new UserService(mockRepository);
+
     // ユーザー取得実行
+    const userList = await service.getAll();
+    const error = userList.error as Error;
+
     // エラーが入ってることを確認
-    // ステータスコードがRepositoryと同じであることを確認
+    expect(error).not.toBeNull();
+
+    // ステータスコード500であることを確認
+    expect(userList.statusCode).toBe(HttpStatusCode.InternalServerError);
   });
 });
