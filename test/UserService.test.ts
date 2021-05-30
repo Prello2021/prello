@@ -1,5 +1,5 @@
 import { User } from "../src/models/User";
-import { UserService } from "../src/services/UserService"; // レポジトリに依存している
+import { UserService } from "../src/services/UserService";
 import { IUserRepository } from "../src/repositories/interfaces/IUserRepository";
 
 const mockUserList: User[] = [
@@ -13,25 +13,17 @@ const mockUserList: User[] = [
     name: "test2",
     hobby: "test2",
   },
+  {
+    id: 3,
+    name: "test3",
+    hobby: "test3",
+  },
 ];
-
-// const mockUser: User = {
-//   id: 1,
-//   name: "test1",
-//   hobby: "test1",
-// };
-
 function createMockUserRepository(): IUserRepository {
   const mockRepository: IUserRepository = {
     getAll: jest.fn(
       () => new Promise<User[]>((resolve) => resolve(mockUserList))
-    ), // 偽装作成
-    // get: jest.fn(
-    //   (id: number) =>
-    //     new Promise<User>((resolve) => {
-    //       if (id === 1) resolve(mockUser);
-    //     })
-    // ),
+    ),
   };
 
   return mockRepository;

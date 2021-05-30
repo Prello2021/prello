@@ -4,7 +4,6 @@ import { IUserService } from "../src/services/interfaces/IUserService";
 import { UserController } from "../src/controllers/UserController";
 
 import request from "supertest";
-import { Result } from "../src/utils/types/Result";
 
 const mockUserList: User[] = [
   {
@@ -16,6 +15,11 @@ const mockUserList: User[] = [
     id: 2,
     name: "test2",
     hobby: "test2",
+  },
+  {
+    id: 3,
+    name: "test3",
+    hobby: "test3",
   },
 ];
 
@@ -36,12 +40,5 @@ describe("UserController 正常系テスト", () => {
     const controller = new UserController(mockService);
     app.use("/api/", controller.router);
     return request(app).get("/api/users").expect(200);
-  });
-  it("get", () => {
-    const app: Application = express();
-    const mockService = createMockIUserService();
-    const controller = new UserController(mockService);
-    app.use("/api/", controller.router);
-    return request(app).get("/api/users/1").expect(200);
   });
 });
