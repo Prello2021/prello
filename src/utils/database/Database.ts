@@ -22,11 +22,11 @@ export class Database {
 
   constructor() {
     const config: DBConfig = {
-      host: process.env.ENV_HOST!,
-      database: process.env.ENV_DB!,
-      user: process.env.ENV_USER!,
-      port: parseInt(process.env.ENV_PORT!),
-      password: process.env.ENV_PASSWORD!,
+      host: process.env.ENV_HOST as string,
+      database: process.env.ENV_DB as string,
+      user: process.env.ENV_USER as string,
+      port: parseInt(process.env.ENV_PORT as string),
+      password: process.env.ENV_PASSWORD as string,
     };
     this.connection = new Client(config);
     this.connection
@@ -46,6 +46,10 @@ export class Database {
   // public async rollback() {
   //   this.connection.query("ROLLBACK");
   // }
+
+  public async close(): Promise<void> {
+    await this.connection.end();
+  }
 
   public async query<T>(
     queryTextOrConfig: string | QueryConfig<any>

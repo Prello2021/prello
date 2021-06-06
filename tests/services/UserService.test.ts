@@ -1,8 +1,8 @@
-import { User } from "../src/models/User";
-import { UserService } from "../src/services/UserService";
-import { IUserRepository } from "../src/repositories/interfaces/IUserRepository";
-import { DatabaseResult } from "../src/utils/database/Database";
-import { HttpStatusCode } from "../src/utils/http/HttpStatusCode";
+import { User } from "../../src/models/User";
+import { UserService } from "../../src/services/UserService";
+import { IUserRepository } from "../../src/repositories/interfaces/IUserRepository";
+import { DatabaseResult } from "../../src/utils/database/Database";
+import { HttpStatusCode } from "../../src/utils/http/HttpStatusCode";
 
 /**
  * モックのユーザー情報(複数)を作成
@@ -39,6 +39,15 @@ function createMockGetAllRepository(
       () =>
         new Promise<DatabaseResult<User[]>>((resolve) => resolve(mockResult))
     ),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    create: jest.fn((user: User) => {
+      const mockResult: DatabaseResult<number> = {
+        value: 0,
+      };
+      return new Promise<DatabaseResult<number>>((resolve) =>
+        resolve(mockResult)
+      );
+    }),
   };
 
   return mockRepository;
@@ -75,9 +84,7 @@ describe("UserService 正常系テスト(複数)", () => {
 describe("UserService 正常系テスト(空のとき)", () => {
   it("getAll", async () => {
     // mockのユーザー情報結果を0件作成
-    const mockResult: DatabaseResult<User[]> = {
-      value: [],
-    };
+    const mockResult: DatabaseResult<User[]> = {};
 
     // Repositoryを作成し、Serviceをインスタンス化
     const mockRepository = createMockGetAllRepository(mockResult);

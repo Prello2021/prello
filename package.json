@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest '--forceExit'",
+    "test_cov": "jest '--forceExit' '--coverage'",
     "start": "node dist/src/main.js",
     "build": "tsc",
     "dev": "nodemon src/main.ts"
