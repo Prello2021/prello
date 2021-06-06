@@ -84,9 +84,7 @@ describe("UserService 正常系テスト(複数)", () => {
 describe("UserService 正常系テスト(空のとき)", () => {
   it("getAll", async () => {
     // mockのユーザー情報結果を0件作成
-    const mockResult: DatabaseResult<User[]> = {
-      value: [],
-    };
+    const mockResult: DatabaseResult<User[]> = {};
 
     // Repositoryを作成し、Serviceをインスタンス化
     const mockRepository = createMockGetAllRepository(mockResult);
